@@ -1,0 +1,8 @@
+Darth Vader, 430000
+Anakin Skywalker, 205000
+Princess Leia, 560000
+Chewbacha Jones, 180000
+Han Solo, 210000
+Robert Frost, 90000
+Julia Child, 40000
+Gordon Ramsey, 1000000
