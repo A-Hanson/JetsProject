@@ -15,13 +15,14 @@ public class FighterJet extends Jet implements CombatReady{
 		System.out.println(getModel() + " goes: Pew pew pew!");
 		System.out.println("wwwwwwhhhhOOOOOOOOOshhhhhhh");
 		System.out.println("No wonder is costs " + getPrice());
+		System.out.println();
 		
 	}
 
 	@Override
 	public void fly() {
-		System.out.println(getModel() + " explodes into action and is now flying at " + (getSpeed() * 100.0) + " mph.");
-		
+		System.out.println(getModel() + " explodes into action and is now flying at " + getSpeed() + " mph.");
+		System.out.println();
 	}
 
 	

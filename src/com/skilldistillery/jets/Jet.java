@@ -25,7 +25,7 @@ public abstract class Jet {
 		this.model = model;
 	}
 	public double getSpeed() {
-		return (speed * 100.0);
+		return speed;
 	}
 	public void setSpeed(double speed) {
 		this.speed = speed;

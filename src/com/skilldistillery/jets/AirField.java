@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 public class AirField {
 	private List<Jet> fleet;
@@ -30,6 +31,15 @@ public class AirField {
 		for (Jet jet : fleet) {
 			jet.fly();
 		}
+	}
+
+	public void flyIndividualJet(String jetName) {
+		for (Jet jet : fleet) {
+			if (jet.getModel().equalsIgnoreCase(jetName)) {
+				jet.fly();
+			}
+		}
+
 	}
 
 	public void printFastestJet() {
@@ -68,38 +78,62 @@ public class AirField {
 		}
 	}
 
-	public void addAJet(int i, String model, double speed, int range, long price) {
+	public Jet addAJet(int i, String model, double speed, int range, long price) {
+		Jet jet = null;
 		switch (i) {
 		case 0:
-			fleet.add(new JetImplement(model, speed, range, price));
+			jet = new JetImplement(model, speed, range, price);
+			fleet.add(jet);
 			System.out.println("A new basic jet was added!");
 			break;
 		case 1:
-			fleet.add(new CargoPlane(model, speed, range, price));
+			jet = new CargoPlane(model, speed, range, price);
+			fleet.add(jet);
 			System.out.println("A new cargo plane was added!");
 			break;
 		case 2:
-			fleet.add(new FighterJet(model, speed, range, price));
+			jet = new FighterJet(model, speed, range, price);
+			fleet.add(jet);
 			System.out.println("A new fighter jet was added!");
 			break;
 		default:
 			System.out.println("Error in jet type selection, please try again");
 		}
+		return jet;
 	}
 
 	public void removeAJet(String jetName) {
-		Predicate<Jet> condition = jet -> jet.getModel().equals(jetName);
+		Predicate<Jet> condition = jet -> jet.getModel().equalsIgnoreCase(jetName);
 		fleet.removeIf(condition);
 		System.out.println("All the models of " + jetName + " were sold.");
 	}
 
-	public void printAllTheJetModels() {
+	public void printAllTheJetModelsWithPrice() {
 		for (Jet jet : fleet) {
 			System.out.println(jet.getModel() + " sells for $" + jet.getPrice());
 		}
 	}
 
-	private Jet assignPilotsToJetsRandomly(Jet jet) {
+	public void printAllAvailablePilots() {
+		for (Pilot pilot : staff) {
+			if (pilot.isAvailable()) {
+				System.out.println(pilot.getName() + " is available for a salary of $" + pilot.getSalary());
+			}
+		}
+		System.out.println("------");
+	}
+
+	public Jet assignPilotToJetChoice(Jet jet, String pilotName) {
+		int indexOfPilot = IntStream.range(0, staff.size())
+				.filter(i -> staff.get(i).getName().equalsIgnoreCase(pilotName))
+				.findFirst()
+				.getAsInt();
+		jet.setPilot(staff.get(indexOfPilot));
+		staff.get(indexOfPilot).setAvailable(false);
+		return jet;
+	}
+
+	public Jet assignPilotsToJetsRandomly(Jet jet) {
 		while (jet.getPilot() == null) {
 			int indexOfPilot = (int) (Math.random() * (staff.size() - 1));
 			if (staff.get(indexOfPilot).isAvailable()) {

@@ -41,7 +41,7 @@ public class JetsApplication {
 			airField.listTheFleet();
 			break;
 		case 2:
-			airField.flyTheFleet();
+			chooseWhichJetToFly();
 			break;
 		case 3:
 			airField.printFastestJet();
@@ -70,12 +70,26 @@ public class JetsApplication {
 			System.out.println("Did you enter a number between 1-9?");
 		}
 	}
-	private void removeJetFromFleet() {
-		String userSelection;
-		airField.printAllTheJetModels();
-		System.out.println("Which model jet do you want to sell?");
-		userSelection = kb.nextLine();
-		airField.removeAJet(userSelection);
+	private void chooseWhichJetToFly() {
+		String userChoice;
+		for (Jet jet : airField.getFleet()) {
+			System.out.println(jet.getModel());
+		}
+		System.out.println("-------");
+		System.out.println("Which model do you want to fly?");
+		System.out.println("Enter the model name or 'All' to fly them all!");
+		try {
+			userChoice = kb.nextLine();
+			userChoice.trim();
+			if ( userChoice.equalsIgnoreCase("all") ) {
+				airField.flyTheFleet();
+			} else {
+				airField.flyIndividualJet(userChoice);
+			}
+		}
+		catch (InputMismatchException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	private void addJetToFleet() {
@@ -100,11 +114,48 @@ public class JetsApplication {
 			System.out.print("What is the price of the jet? ");
 			long price = kb.nextLong();
 			kb.nextLine();
-			airField.addAJet(typeOfJet, model, speed, range, price);
+			Jet newJet = airField.addAJet(typeOfJet, model, speed, range, price);
+			hireAPilot(newJet);
 		}
 		catch(InputMismatchException e) {
 			System.out.println("Sorry, there seems to be an error with that value.");
 		}
+	}
+	
+	private void hireAPilot(Jet jet) {
+		System.out.println("Would you like to hire a pilot for the aircraft or have one randomly assigned?");
+		System.out.println("Enter 1 for hiring a pilot, 2 for a random assignment.");
+		int userChoice = 0;
+		
+		try {
+			userChoice = kb.nextInt();
+			kb.nextLine();
+			if (userChoice == 1) {
+				airField.printAllAvailablePilots();
+				String userPilotChoice;
+				System.out.println("Please enter the name of the pilot you which to hire.");
+				userPilotChoice = kb.nextLine();
+				airField.assignPilotToJetChoice(jet, userPilotChoice);
+			} else if (userChoice == 2) {
+				airField.assignPilotsToJetsRandomly(jet);
+				
+			} else {
+				System.out.println("Did you enter 1 or 2?");
+			}
+			System.out.println(jet.getPilot().getName() + " was hired to pilot this aircraft. They have a salary of $" + jet.getPilot().getSalary());
+		}
+		catch (InputMismatchException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	private void removeJetFromFleet() {
+		String userSelection;
+		airField.printAllTheJetModelsWithPrice();
+		System.out.println("Which model jet do you want to sell?");
+		userSelection = kb.nextLine();
+		userSelection.trim();
+		airField.removeAJet(userSelection);
 	}
 	
 	private void displayUserMenu() {
@@ -112,7 +163,7 @@ public class JetsApplication {
 		System.out.println("Please enter the number for the activity you\n"
 				+ "want to do.");
 		System.out.println("1. List the fleet");
-		System.out.println("2. Fly all the aircrafts");
+		System.out.println("2. Fly the aircrafts");
 		System.out.println("3. View the fastest jet");
 		System.out.println("4. View the jet with the longest range");
 		System.out.println("5. Load all the Cargo Jets");
