@@ -51,8 +51,7 @@ public abstract class Jet {
 	
 	@Override
 	public String toString() {
-		// without pilot
-		return "Jet [model=" + model + ", speed=" + (speed * 100.0) + ", range=" + range + ", price=" + price +  "]";
+		return "Jet [model=" + model + ", speed=" + speed + ", range=" + range + ", price=" + price + ", pilot= " + pilot.getName() + "]";
 	}
 	
 	
