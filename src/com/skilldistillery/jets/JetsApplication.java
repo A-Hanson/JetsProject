@@ -1,10 +1,8 @@
 package com.skilldistillery.jets;
 
-import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import javax.activity.InvalidActivityException;
 
 public class JetsApplication {
 	private AirField airField = new AirField();
@@ -24,13 +22,14 @@ public class JetsApplication {
 			displayUserMenu();
 			try {
 				userChoice = kb.nextInt();
+				kb.nextLine();
+				System.out.println("Good choice! Loading selection now...");
+				System.out.println("*-------------------------------------------*");
 			} catch (InputMismatchException e) {
 				System.out.println("Whoopsie, please try a number between 1 - 9.");
 			}
 			selectChoice(userChoice);
-			if (userChoice == 9) {
-				// figure out how to break the loop
-			}
+			
 			
 		}
 		
@@ -60,36 +59,52 @@ public class JetsApplication {
 			addJetToFleet();
 			break;
 		case 8:
-			// TODO remove a jet from fleet
+			removeJetFromFleet();
 			break;
 		case 9:
 			keepGoing = false;
 			System.out.println("Goodbye, we'll bill you for the damages later.");
 			System.out.println("*-------------------------------------------*");
+			break;
 		default:
 			System.out.println("Did you enter a number between 1-9?");
 		}
 	}
+	private void removeJetFromFleet() {
+		String userSelection;
+		airField.printAllTheJetModels();
+		System.out.println("Which model jet do you want to sell?");
+		userSelection = kb.nextLine();
+		airField.removeAJet(userSelection);
+	}
+	
 	private void addJetToFleet() {
 		int typeOfJet = 0;
-		System.out.println("Which type of Jet do you want to add?\n"
-				+ "Enter 1 for a Cargo Plane and 2 for Fighter Jet.");
-		typeOfJet = kb.nextInt();
-		System.out.print("What is the model of the jet? ");
-		String model = kb.nextLine();
-		System.out.println();
-		System.out.print("What is the speed of the jet? ");
-		double speed = kb.nextDouble();
-		kb.nextLine();
-		System.out.println();
-		System.out.print("What is the range of the jet? ");
-		int range = kb.nextInt();
-		kb.nextLine();
-		System.out.println();
-		System.out.print("What is the price of the jet? ");
-		long price = kb.nextLong();
-		kb.nextLine();
-		airField.addAJet(typeOfJet, model, speed, range, price);
+		try {
+			System.out.println("Which type of Jet do you want to add?\n"
+					+ "Enter 1 for a Cargo Plane and 2 for Fighter Jet.");
+			typeOfJet = kb.nextInt();
+			kb.nextLine();
+			String model;
+			System.out.print("What is the model of the jet? ");
+			model = kb.nextLine();
+			System.out.println();
+			System.out.print("What is the speed of the jet? ");
+			double speed = kb.nextDouble();
+			kb.nextLine();
+			System.out.println();
+			System.out.print("What is the range of the jet? ");
+			int range = kb.nextInt();
+			kb.nextLine();
+			System.out.println();
+			System.out.print("What is the price of the jet? ");
+			long price = kb.nextLong();
+			kb.nextLine();
+			airField.addAJet(typeOfJet, model, speed, range, price);
+		}
+		catch(InputMismatchException e) {
+			System.out.println("Sorry, there seems to be an error with that value.");
+		}
 	}
 	
 	private void displayUserMenu() {

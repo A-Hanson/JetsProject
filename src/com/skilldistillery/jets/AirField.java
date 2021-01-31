@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class AirField {
 	private List<Jet> fleet;
@@ -80,6 +81,18 @@ public class AirField {
 			break;
 		default:
 			System.out.println("Error in jet type selection, please try again");
+		}
+	}
+	
+	public void removeAJet(String jetName) {
+		Predicate<Jet> condition = jet -> jet.getModel().equals(jetName);
+		fleet.removeIf(condition);
+		System.out.println("All the models of " + jetName + " were sold.");
+	}
+	
+	public void printAllTheJetModels() {
+		for (Jet jet : fleet) {
+			System.out.println(jet.getModel() + " sells for $" + jet.getPrice());
 		}
 	}
 	
